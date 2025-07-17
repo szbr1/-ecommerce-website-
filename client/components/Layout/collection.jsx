@@ -9,12 +9,11 @@ import { Coins, HeadphonesIcon, Headset, MapPinCheck } from "lucide-react";
 function Collection() {
     // created hook to get specific amount of products
   const [products, setProducts] = useState([]);
-  const [bestseller, setBestSeller] = useState([]);
 
   useEffect(() => {
     // using slice we get only the top 10 products
     setProducts(AllProducts.slice(0, 10));
-    setBestSeller(AllProducts.slice(15, 20));
+    
   }, []);
   return (
     
@@ -50,38 +49,8 @@ function Collection() {
         })}
         </div>
 
-<div className="py-8 flex justify-center items-center flex-col">
-<div className="flex uppercase justify-center gap-1 w-full  items-center text-4xl font-semibold text-gray-600">
-        <Image
-          src={"/thin.png"}
-          alt=""
-          className="h-1 text-gray-600/70  w-20"
-          height={200}
-          width={70}
-        />
-        <span className="font-normal uppercase text-gray-600/70">
-        Best
-        </span>
-            
-        Seller
-      </div>
-      <span  className="w-full flex text-gray-600 justify-center items-center py-3 pb-6">Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe recusandae quia eum architecto.
-      </span>
-</div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 lg:gap-3 gap-1">
+
      
-      {bestseller.map((product) => {
-          return (
-              <ProductGrid
-              key={product._id}
-              name={product.name}
-              image={product.image}
-              price={product.price}
-              _id={product._id}
-              />
-            );
-        })}
-        </div>
       <div>
         <div className="grid grid-cols-1 md:grid-cols-3 py-16 gap-6 ">
 

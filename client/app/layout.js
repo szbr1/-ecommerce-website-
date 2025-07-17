@@ -1,4 +1,4 @@
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/Layout/Navbar";
 import "./globals.css";
 
 import { Outfit, Lora } from 'next/font/google'

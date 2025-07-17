@@ -1,7 +1,8 @@
 import {  Search, ShoppingBag, UserRound } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
-import Menu from './clientcomponents/Menu'
+import Menu from '../clientcomponents/Menu'
+
 
 function Navbar() {
   return (

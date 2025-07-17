@@ -1,6 +1,9 @@
 
 
-import Collection from "@/components/Layout/collection";
+import Collection from "@/components/Layout/Collection";
+import Footer from "@/components/Layout/Footer";
+import PoliciesHighlight from "@/components/Layout/PoliciesHighlight";
+import TopPicks from "@/components/Layout/TopPicks";
 import { Prata } from "next/font/google";
 import Image from "next/image";
 import React from "react";
@@ -35,6 +38,14 @@ export default function Home() {
     </div>
     
     <Collection />
+
+    {/* seller area  */}
+   < TopPicks />
+
+   {/* policies  */}
+   <PoliciesHighlight />
+
+   <Footer />
     
     </>
   );
