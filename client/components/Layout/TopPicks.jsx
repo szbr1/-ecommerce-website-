@@ -12,7 +12,7 @@ function TopPicks() {
           setBestSeller(AllProducts.slice(15, 20));
         }, []);
   return (
-    <div className='md:px-12  p-2'>
+    <div >
           <div className="py-8 flex justify-center items-center flex-col">
           <div className="flex uppercase justify-center gap-1 w-full  items-center text-4xl font-semibold text-gray-600">
             <Image

@@ -2,6 +2,7 @@ import Navbar from "@/components/Layout/Navbar";
 import "./globals.css";
 
 import { Outfit, Lora } from 'next/font/google'
+import Footer from "@/components/Layout/Footer";
 
 const outfit = Outfit({ 
   subsets: ['latin'],
@@ -18,9 +19,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en " >
-      <body className={`${outfit.className}`}>
+      <body className={`${outfit.className} md:px-12 p-2 `}>
         <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );
