@@ -42,6 +42,8 @@ function Footer() {
     </div>
 
     <div className='py-5 mb-3 mt-4 border-y border-gray-200 flex justify-center items-center w-full'>Copyright 2025@ forever.com - All Right Reserved</div>
+
+    <div className='h-44 w-full flex-1'></div>
     </div>
   )
 }

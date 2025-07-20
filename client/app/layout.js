@@ -3,6 +3,7 @@ import "./globals.css";
 
 import { Outfit, Lora } from 'next/font/google'
 import Footer from "@/components/Layout/Footer";
+import ContextProvider from "@/components/ContexProvider";
 
 const outfit = Outfit({ 
   subsets: ['latin'],
@@ -19,10 +20,15 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en " >
-      <body className={`${outfit.className} md:px-12 p-2 `}>
+
+      <body className={`${outfit.className} px-2 lg:px-12 `}>
+      <ContextProvider>
+
         <Navbar />
         {children}
         <Footer />
+      </ContextProvider>
+      
       </body>
     </html>
   );

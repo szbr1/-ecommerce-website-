@@ -37,11 +37,12 @@ function FeaturedProduct() {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 lg:gap-3 gap-1">
 
       {products.map((product) => {
+        
           return (
               <ProductGrid
               key={product._id}
               name={product.name}
-              image={product.image}
+              image={product.images[0]}
               price={product.price}
               _id={product._id}
               />

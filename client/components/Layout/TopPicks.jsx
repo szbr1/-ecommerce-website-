@@ -38,7 +38,7 @@ function TopPicks() {
                  <ProductGrid
                  key={product._id}
                  name={product.name}
-                 image={product.image}
+                 image={product.images[0]}
                  price={product.price}
                  _id={product._id}
                  />
