@@ -8,6 +8,7 @@ function ContexProvider({children}) {
 const [openProductId, setOpenProductId] = useState(false);
 const [searchDetail, setSearchDetail] = useState("");
 const [cartProduct, setCartProduct] = useState({});
+const [totalProductsInCart, setTotalProductsInCart] = useState(0)
 
 const addToCart = async (itemId , size)=>{
 
@@ -35,15 +36,29 @@ const addToCart = async (itemId , size)=>{
   return setCartProduct(clone)
 }
 
+const getCartItems = ()=>{
+  let totalCartProducst = 0
+  for(const items in cartProduct){
+    for(const item in cartProduct[items]){
+      if(cartProduct[items][item]){
+      totalCartProducst += cartProduct[items][item]
+      setTotalProductsInCart(totalCartProducst)
+      }else{
+        toast.error("Invalid Size Selection")
+      }
+    }
+  }
+}
+
+
 useEffect(()=>{
-console.log(cartProduct)
+getCartItems()
 },[cartProduct])
 
 
 
-
   return (
-    <Context.Provider value={{setOpenProductId,cartProduct, addToCart, cartProduct, setCartProduct, setSearchDetail, openProductId, searchDetail}} >
+    <Context.Provider value={{setOpenProductId,cartProduct, addToCart, totalProductsInCart, cartProduct, setSearchDetail, openProductId, searchDetail}} >
       {children}
     </Context.Provider>
   )

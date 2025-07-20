@@ -48,7 +48,7 @@ let addToCartProductDetails;
 
         
         return (
-    <div key={item._id} className='grid md:grid-cols-2 grid-cols-1'>
+    <div key={item._id} className='grid md:grid-cols-2 grid-cols-1 mt-12'>
           <div className='flex'>
            {/* Display images  */}
            <div className='flex flex-col gap-2 '>

@@ -1,14 +1,17 @@
 "use client"
 import {  Search, ShoppingBag, UserRound } from 'lucide-react'
 import Link from 'next/link'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import Menu from '../clientcomponents/Menu'
-import { Context } from '../ContexProvider'
+import { Context } from '@/components/ContexProvider'
 
 
 function Navbar() {
-  // const {cartProduct} = useContext(Context)
+  const {totalProductsInCart: cartCounter} = useContext(Context)
+
   return (
+    <div className='fixed top-0 left-0 z-50 w-full bg-white'>
+
     <div className='flex justify-between items-center container lg:px-12 p-3 text-gray-500 border-b border-gray-200'>
        {/* logo  */}
        <Link href={"/"} className='text-black text-lg font-semibold lg:text-xl'>
@@ -32,15 +35,17 @@ function Navbar() {
         <Link href={"/profile"}>
        <UserRound className='hidden md:block size-5 hover:text-green-600 cursor-pointer' />
         </Link>
-       <span>::</span>
+      
        
        <Search  className='size-5 hover:text-green-600 cursor-pointer'/>
-       <Link href={"/cart"}>
+       <Link href={"/cart"} className='relative'>
        <ShoppingBag   className='size-5 hover:text-green-600 cursor-pointer'/>
+       <span className='absolute -bottom-1 -right-0 flex justify-center items-center text-[10px] bg-black rounded-full size-[13px] text-white'>{cartCounter}</span>
         </Link>
         {/* // import the client component  */}
        <Menu />
        </div>
+    </div>
     </div>
   )
 }

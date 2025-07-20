@@ -70,7 +70,7 @@ function page() {
     console.log(Category);
   }, [Category, subCategory]);
   return (
-    <div className="flex flex-col md:flex-row py-7 text-gray-700">
+    <div className="flex flex-col md:flex-row py-7 text-gray-700 mt-12">
       <div>
         <span
           onClick={() => setToggleFilter(!toggleFilter)}
