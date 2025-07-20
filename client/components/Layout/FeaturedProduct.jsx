@@ -34,7 +34,7 @@ function FeaturedProduct() {
       </div>
       <span  className="w-full flex text-gray-600 justify-center items-center py-3 pb-6">Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe recusandae quia eum architecto.
       </span>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 lg:gap-3 gap-1">
+      <div className="grid grid-cols-2 lg:grid-cols-5 lg:gap-3 gap-1">
 
       {products.map((product) => {
         

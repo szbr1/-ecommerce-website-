@@ -1,10 +1,13 @@
+"use client"
 import {  Search, ShoppingBag, UserRound } from 'lucide-react'
 import Link from 'next/link'
-import React from 'react'
+import React, { useContext } from 'react'
 import Menu from '../clientcomponents/Menu'
+import { Context } from '../ContexProvider'
 
 
 function Navbar() {
+  // const {cartProduct} = useContext(Context)
   return (
     <div className='flex justify-between items-center container lg:px-12 p-3 text-gray-500 border-b border-gray-200'>
        {/* logo  */}
@@ -17,7 +20,7 @@ function Navbar() {
 
      <div className='hidden lg:flex justify-center items-center gap-4'>
         <Link className='hover:font-bold hover:border-green-500 hover:border-b-2' href={"/"}>Home</Link>
-        <Link className='hover:font-bold  hover:border-green-600 cursor-pointer hover:border-b-2' href={"collection"}>Collection</Link>
+        <Link className='hover:font-bold  hover:border-green-600 cursor-pointer hover:border-b-2' href={"/collection"}>Collection</Link>
         <Link className='hover:font-bold hover:border-green-500 hover:border-b-2' href={"about"}>About</Link>
         <Link className='hover:font-bold hover:border-green-500 hover:border-b-2' href={"contact"}>Contact</Link>
      </div>
@@ -29,9 +32,10 @@ function Navbar() {
         <Link href={"/profile"}>
        <UserRound className='hidden md:block size-5 hover:text-green-600 cursor-pointer' />
         </Link>
+       <span>::</span>
        
        <Search  className='size-5 hover:text-green-600 cursor-pointer'/>
-       <Link href={"cart"}>
+       <Link href={"/cart"}>
        <ShoppingBag   className='size-5 hover:text-green-600 cursor-pointer'/>
         </Link>
         {/* // import the client component  */}

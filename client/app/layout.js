@@ -4,6 +4,7 @@ import "./globals.css";
 import { Outfit, Lora } from 'next/font/google'
 import Footer from "@/components/Layout/Footer";
 import ContextProvider from "@/components/ContexProvider";
+import { Toaster } from "react-hot-toast";
 
 const outfit = Outfit({ 
   subsets: ['latin'],
@@ -21,9 +22,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en " >
 
-      <body className={`${outfit.className} px-2 lg:px-12 `}>
+      <body className={`${outfit.className} px-2 lg:px-28 `}>
       <ContextProvider>
-
+      <Toaster
+  position="top-right"
+  reverseOrder={false}
+/>
         <Navbar />
         {children}
         <Footer />

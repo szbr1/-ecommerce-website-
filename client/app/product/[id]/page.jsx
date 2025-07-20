@@ -1,15 +1,18 @@
 "use client"
-import React, { use, useEffect, useMemo, useState } from 'react'
+import React, { use, useContext, useEffect, useMemo, useState } from 'react'
 import { products } from '@/lib/products'
 import Image from 'next/image'
 import { FaStar } from "react-icons/fa";
 import { Star } from 'lucide-react';
 import Link from 'next/link';
 import ProductGrid from '@/components/product/ProductGrid';
+import { Context } from '@/components/ContexProvider';
 
 function page({params}) {
   const {id} = use(params)
   const [clickImageSwither, setClickImageSwitcher] = useState()
+  const {addToCart} = useContext(Context);
+  const [size , setSize] = useState()
 
   
   
@@ -20,14 +23,16 @@ function page({params}) {
   let RealtedProduct  = useMemo(()=>{
     return products.filter(item => item.category === FetchProduct[0].category).slice(0,5)
   },[id,products])
- 
 
+ 
+let addToCartProductDetails;
   useEffect(()=>{
      setClickImageSwitcher( FetchProduct[0].images[0])
+     addToCartProductDetails = FetchProduct[0]
      console.log(clickImageSwither)
+     
   }, [FetchProduct])
 
-  
   
   
  
@@ -49,7 +54,7 @@ function page({params}) {
            <div className='flex flex-col gap-2 '>
             {item.images.map((image,index)=>{
               return(
-                <div key={index++} className='h-[4rem] lg:h-[9rem] lg:w-[8rem] w-[4rem] pr-2'>
+                <div key={index++} className='h-[4rem] mt-[2px] lg:h-[9rem] lg:w-[8rem] w-[4rem] pr-2'>
 
                 <Image src={image} onClick={()=>setClickImageSwitcher(image)} height={300} width={200} className='h-full cursor-pointer  w-full object-cover' />
                 </div>
@@ -58,7 +63,7 @@ function page({params}) {
            </div>
            {/* product details  */}
            
-           <div className='h-[24rem]  overflow-hidden lg:w-[38rem] lg:h-[38rem]  w-[22rem] b-gray-700/40 backdrop-blur-lg'>
+           <div className='h-[24rem]  overflow-hidden lg:w-[35rem] lg:h-[38rem]  w-[22rem] b-gray-700/40 backdrop-blur-lg'>
                 <Image src={clickImageSwither} height={300} width={200} className='h-full w-full object-cover' />
            </div>
           </div>
@@ -84,17 +89,16 @@ function page({params}) {
             <p className='text-2xl font-semibold py-3'>Select Size</p>
 
             <div className='flex'>
-            {item.sizes.map((size)=>{
+            {item.sizes.map((s)=>{
               return (
-                <button className='h-16 w-16 flex justify-center items-center  ml-2 border border-gray-200 ' key={size}>
-           {size}
+                <button onClick={()=> setSize(s)} className='h-16 w-16 flex justify-center items-center  ml-2 border border-gray-200 ' key={s}>
+           {s}
               </button>
              )
             })}
             </div>
-
             {/* Cart Button  */}
-            <div className='bg-black py-3 flex ml-2 cursor-pointer justify-center items-center my-5 uppercase w-44 text-white'>add to cart</div>
+            <button onClick={()=>addToCart(item._id, size)} className='bg-black py-3 flex ml-2 cursor-pointer justify-center items-center my-5 uppercase w-44 text-white'>add to cart</button>
 
             <hr className='bg-gray-300 h-[2px]'/>
 
