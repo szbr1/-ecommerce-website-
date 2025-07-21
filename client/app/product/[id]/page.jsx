@@ -10,7 +10,7 @@ import { Context } from '@/components/ContexProvider';
 
 function page({params}) {
   const {id} = use(params)
-  const [clickImageSwither, setClickImageSwitcher] = useState()
+  const [clickImageSwither, setClickImageSwitcher] = useState(null)
   const {addToCart} = useContext(Context);
   const [size , setSize] = useState()
 

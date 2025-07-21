@@ -1,36 +1,42 @@
+import Image from 'next/image'
 import React from 'react'
-import "./index.css"
+import { FaGoogle } from 'react-icons/fa'
 
-function page() {
+function Page() {
   return (
-    <div className='h-screen w-full bg-zinc-800 flex justify-center items-center'>
-      <div className='rounded-lg bg-white p-5 border-2 shadow-purple-800/50 shadow-md s border-purple-800'>
-        <h1 className='text-3xl font-bold '>Price Counter </h1>
-        <p className='text-black font-sm '>Write Down your values</p>
-          
-          <div className='flex gap-3 py-3 justify-center items-center'>
-            <span>MIN</span>
-            <input className="py-2 px-2 w-32 border-purple-400 rounded-md outline-none border " type="number"  />
-            <span>-</span>
-            <span>MAX</span>
-            <input className="py-2 px-2 w-32 outline-none border border-purple-400 rounded-md " type="number"  />
-          </div>
+    <div className='mt-12 py-8 grid grid-cols-1 md:grid-cols-2'>
+       
+       <div className='flex justify-start gap-4 items-center h-screen w-full flex-col px-4  md:px-32 '>
 
-          <div className='   px-4  py-5'>
-            <div className='w-full relative bg-slate-200 h-2 rounded-lg '>
-               
-              <div className=' absolute  left-[25%] right-[25%] z-20 top-0 h-2 rounded-lg bg-purple-500'></div>
+        <h2 className='text-3xl py-8 font-semibold uppercase'>Welcome to Login</h2>
+        
+        
+        <input type="email" required placeholder='Email'  className='p-3 text-lg px-4 border border-slate-950 rounded-full w-full'/>
+        <input type="password" required placeholder='Password'  className='p-3 text-lg px-4 border border-slate-950 rounded-full w-full'/>
+        {/* <div className=' text-gray-500 flex justify-end items-center w-full mr-8'>
+           <div>Forget password</div>
+        </div> */}
 
+        <div className='w-full bg-black text-white font-semibold text-xl py-3 my-3 shadow-md backdrop:blur-3xl shadow-black flex justify-center items-center rounded-md'> SignIn</div>
+           
+           <div className=' flex w-full gap-3 justify-between'>
+             <div className='flex gap-3 justify-center  border rounded-md border-slate-900 p-2 w-full items-center font-semibold text-xl'>
+             <Image src={"/google.png"} height={20} width={30}  />
+               &nbsp; Google
+              </div>
+              <div className='flex gap-3 justify-center border rounded-md border-slate-900 p-2 w-full items-center font-semibold text-xl'>
+             <Image src={"/github.png"} height={20} width={30}  />
+               &nbsp; Github
+              </div>
+           </div>
+       </div>
 
-              <input type="range" className='absolute pi appearance-none -top-1 w-full bg-none range-min left-0' min={0} max={100} />
-              <input type="range" className='absolute appearance-none -top-1 w-full bg-none range-max right-0' min={0} max={100} />
-            </div>
-          </div>
-      </div>
-      
-
+       {/* poster area  */}
+       <div>
+        
+       </div>
     </div>
   )
 }
 
-export default page
+export default Page

@@ -24,8 +24,8 @@ function Navbar() {
      <div className='hidden lg:flex justify-center items-center gap-4'>
         <Link className='hover:font-bold hover:border-green-500 hover:border-b-2' href={"/"}>Home</Link>
         <Link className='hover:font-bold  hover:border-green-600 cursor-pointer hover:border-b-2' href={"/collection"}>Collection</Link>
-        <Link className='hover:font-bold hover:border-green-500 hover:border-b-2' href={"about"}>About</Link>
-        <Link className='hover:font-bold hover:border-green-500 hover:border-b-2' href={"contact"}>Contact</Link>
+        <Link className='hover:font-bold hover:border-green-500 hover:border-b-2' href={"/about"}>About</Link>
+        <Link className='hover:font-bold hover:border-green-500 hover:border-b-2' href={"/contact"}>Contact</Link>
      </div>
 
         

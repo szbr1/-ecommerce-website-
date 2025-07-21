@@ -9,9 +9,9 @@ function ProductGrid({name, _id, price, image}) {
       
   return (
     <Link href={`/product/${_id}`}  className='w-full flex flex-col gap-1  ' >
-      <div className='w-full h-full overflow-hidden rounded-xl '>
+      <div className='w-full h-[330px]  overflow-hidden  '>
 
-    <Image src={image} alt='' height={700} width={500} className='h-full rounded-xl object-cover hover:scale-125 transition-all ease-in-out '  />
+    <Image src={image} alt='' height={700} width={500} className='h-full w-full object-cover hover:scale-125 transition-all ease-in-out '  />
       </div>
     <span className='text-gray-500'>{name}</span>
     <span className='text-black '>${price}</span>
