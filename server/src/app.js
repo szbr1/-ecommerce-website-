@@ -1,17 +1,25 @@
+import dotenv from "dotenv";
+dotenv.config(); // 👈 MUST be at the top
+
 import express from "express";
-import dotenv from "dotenv"
+import cookieParser from "cookie-parser";
 import mongoDBconnection from "./lib/monogdb.js";
 import Product from "./models/product.model.js";
-import AuthRoutes from "./routes/auth.routes.js"
-
+import AuthRoutes from "./routes/auth.routes.js";
+import "./config/googleAuth.js";
+import "./config/githubAuth.js"
 
 const app = express();
-dotenv.config()
+
 const PORT = 4999;
 
-app.use("/api/auth", AuthRoutes )
+app.use(cookieParser());
+app.use(express.json());
 
-mongoDBconnection()
+app.use("/api/auth", AuthRoutes);
+
+mongoDBconnection();
+
 app.listen(PORT, () => {
-  console.log(`🫡 Server running at http://localhost:${PORT}`);
+  console.log(`🫡 Server running at http://localhost:${PORT}/api/auth`);
 });

@@ -11,7 +11,23 @@ const UserSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true
+        required: function () {
+            return !this.googleId && !this.githubId;
+          }
+    },
+    githubId: {
+        type: String,
+
+    },
+    googleId: {
+        type: String,
+
+    },
+    avatar: {
+        type: String
+    },
+    gitAvatar: {
+        type: String
     },
     cart: {
         type: Object,
