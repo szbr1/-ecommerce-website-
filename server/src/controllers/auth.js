@@ -8,29 +8,44 @@ export const signup = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
-    const emailCheck = await User.findOne({ email });
-    if (emailCheck) {
-      return res.status(401).json("Please signin user already exist");
-    }
-    if (!validator.isEmail(email)) {
-      return res.status(400).json("Please enter valid email");
-    }
-    if (!validator.isStrongPassword(password, { minLength: 8 })) {
-      return res.status(400).json("Please choose strong password");
-    }
+    let emailCheck = await User.findOne({ email });
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+     if(emailCheck && (emailCheck.githubId || emailCheck.googleId) && !emailCheck.password){
+      if (!validator.isStrongPassword(password, { minLength: 8 })) {
+        return res.status(400).json("Please choose strong password");
+      }
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
 
-    const SaveUsertoDB = new User({
-      username,
-      email,
-      password: hashedPassword,
-    });
+    
+  
+      emailCheck.password = hashedPassword
+      await emailCheck.save()
+      const token = AssignToken(res, emailCheck._id)
+      return res.status(200).json({success: true, token})
 
-    await SaveUsertoDB.save();
-    const token = AssignToken(res, SaveUsertoDB._id);
-    return res.status(200).json({ success: true, SaveUsertoDB, token });
+      
+     }else{
+      if (!validator.isEmail(email)) {
+        return res.status(400).json("Please enter valid email");
+      }
+      if (!validator.isStrongPassword(password, { minLength: 8 })) {
+        return res.status(400).json("Please choose strong password");
+      }
+  
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+  
+      const saveUsertoDB = new User({
+        username,
+        email,
+        password: hashedPassword,
+      });
+  
+      await saveUsertoDB.save();
+      const token = AssignToken(res, saveUsertoDB._id);
+      return res.status(200).json({ success: true, saveUsertoDB, token });
+     }
   } catch (error) {
     console.error("signup error", error);
   }
