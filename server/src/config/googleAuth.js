@@ -20,7 +20,7 @@ passport.use(
         let user = await User.findOne({ email });
 
         if (user) {
-          // ✅ Link Google account if not linked
+      
           if (!user.googleId) {
             user.googleId = profile.id;
             user.avatar = avatar;
