@@ -1,5 +1,5 @@
 "use client";
-import { products } from "@/lib/products";
+import useProductStore from "@/store/useProductStore";
 import React, { createContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -11,7 +11,16 @@ function ContextProvider({ children }) {
   const [cartProduct, setCartProduct] = useState({});
   const [totalProductsInCart, setTotalProductsInCart] = useState(0);
   const [deliver_fee,setDelivery_fee] = useState(10)
+  const { listProduct, ActuallProduct } = useProductStore();
+  const [products, setProducts] = useState([])
 
+
+  useEffect(() => {
+              listProduct();
+             }, []);
+ useEffect(()=>{
+                setProducts(ActuallProduct)
+              },[ActuallProduct])
   const addToCart = async (itemId, size) => {
     if (!itemId || !size) {
       toast.error("Please select any size");

@@ -1,16 +1,25 @@
 "use client";
-import { products } from '@/lib/products';
 import { Context } from '@/components/ContexProvider';
 import React, { useContext, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Trash2 } from 'lucide-react';
 import CartCheckoutArea from '@/components/Layout/CartCheckoutArea';
 import Title from '@/components/ui/Title';
+import useProductStore from '@/store/useProductStore';
 
 function Page() {
   const { cartProduct, updateQunatity } = useContext(Context);
   const [cartData, setCartData] = useState([]);
+  const { listProduct, ActuallProduct } = useProductStore();
+  const [products, setProducts] = useState([])
 
+   useEffect(() => {
+               listProduct();
+              }, []);
+
+              useEffect(()=>{
+                setProducts(ActuallProduct)
+              },[ActuallProduct])
   useEffect(() => {
     const newCartData = [];
 
@@ -28,7 +37,6 @@ function Page() {
     }
 
     setCartData(newCartData);
-    console.log(newCartData);
   }, [cartProduct]);
 
   if (Object.keys(cartProduct).length === 0) {
@@ -43,47 +51,64 @@ function Page() {
   return (
     <>
   <div className='mt-12 py-8' >
-    <Title title1={"your"} title2={"cart"} />
-    {cartData.map(item => {
-      const matchedProduct = products.filter(product => product._id === item._id)
-      console.log("matchedProduct:" , matchedProduct)
-      
-      return matchedProduct.map((prod, index) => (
+       <Title title1={"your"} title2={"cart"} />
+       {cartData.map(item => {
+               const matchedProduct = products.filter(product => product._id === item._id)
+               return matchedProduct.map((prod, index) => (
         
-        <div className=' mt-2 ' key={index+1}>
-       <hr className='py-2'/>
-         <div className='flex justify-between  items-start'>
- {/* flex 1  */}
-          <div className='flex gap-3'>
-            <div className='h-20 w-16'>
-            <Image src={prod.images[0]} height={200} width={200} className='h-full w-full object-cover' />
-            </div>
+                   <div className=' mt-2 ' key={index+1}>
+                        <hr className='py-2'/>
+                            <div className='flex justify-between  items-start'>
+                              <div className='flex gap-3'>
+                                    <div className='h-20 w-16'>
+                                          {prod.images[0]&&(
+                                          <Image 
+                                          src={prod.images[0]} 
+                                          alt="" height={200} 
+                                          width={200} 
+                                          className='h-full w-full object-cover' />)}
+                                     </div>
 
-            <div className='flex flex-col gap-3'>
-              <p className='text-sm text-gray-500 w-[8rem] lg:w-auto truncate '>{prod.name}</p>
+                                     <div className='flex flex-col gap-3'>
+                                          <p
+                                          className='text-sm text-gray-500 w-[8rem] lg:w-auto truncate '>
+                                             {prod.name}
+                                          </p>
 
-              <div className='flex gap-4'>
-                <span>${prod.price}</span> <span className='size-8 border border-gray-300 flex justify-center items-center p-1 text-gray-400'>{item.size}</span>
-              </div>
+                                          <div className='flex gap-4'>
+                                              <span>${prod.price}</span> 
+                                              <span 
+                                              className='size-8 border border-gray-300 flex justify-center items-center p-1 text-gray-400'>
+                                                  {item.size}
+                                              </span>
+                                           </div>
 
-            </div>
+                                     </div>
             
-             </div>
-  {/* flex 2 */}
-          <input type="number" className='py-2 px-3 w-20 border border-gray-600' onChange={e => e.target.value === "" || "0" ? null : updateQunatity(item._id,size, Number(e.target.value))} defaultValue={item.quantity}  />
+                              </div>
+                               {/* flex 2 */}
+                              <input 
+                              type="number" 
+                              className='py-2 px-3 w-20 border border-gray-600' 
+                              onChange={e => e.target.value === "" || "0" ? null : updateQunatity(item._id,size, Number(e.target.value))} defaultValue={item.quantity}  
+                              />
 
-  {/* flex 3  */}
-          <div onClick={()=> updateQunatity(item._id, item.size, 0)} className='mx-4 border border-gray-400 p-2 backdrop-blur-3xl bg-black/20 rounded-sm'>
-            <Trash2 />
-             </div>
+                                       {/* flex 3  */}
+                               <div 
+                                onClick={()=> updateQunatity(item._id, item.size, 0)} 
+                                className='mx-4 border border-gray-400 p-2 backdrop-blur-3xl bg-black/20 rounded-sm'>
+                                  
+                                            <Trash2 />
 
-         </div>
-        </div>
-       ))
-    })}
+                                </div>
+
+                            </div>
+                   </div>
+         ))
+      })}
   </div>
   <CartCheckoutArea />
-          </>
+  </>
   );
 }
 

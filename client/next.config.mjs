@@ -1,15 +1,20 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        remotePatterns: [
-            {
-                hostname: "picsum.photos",
-                protocol: "https",
-                pathname: "/**"
-                
-            }
-        ]
-    }
-};
-
-export default nextConfig;
+      remotePatterns: [
+        {
+          protocol: "https",
+          hostname: "picsum.photos",
+          pathname: "/**",
+        },
+        {
+          protocol: "https",
+          hostname: "res.cloudinary.com",
+          pathname: "/**",
+        },
+      ],
+    },
+  };
+  
+  export default nextConfig;
+  

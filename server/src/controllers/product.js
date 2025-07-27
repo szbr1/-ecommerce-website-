@@ -26,7 +26,7 @@ export const add  =  async(req , res)=>{
               return result.secure_url
         }))
 
-
+      console.log(bestseller)
       const product =   await Product.create({
             name,
             price,
@@ -34,7 +34,7 @@ export const add  =  async(req , res)=>{
             category,
             subcategory,
             sizes,
-            bestseller,
+            bestseller: bestseller === "true",
             images
         })
 
@@ -48,20 +48,28 @@ export const add  =  async(req , res)=>{
 
 
 
-// export const   =  async(req , res)=>{
-//     try {
-        
-//     } catch (error) {
-        
-//     }
-// }
+export const removeProduct  =  async(req , res)=>{
+    try {
+        const {id} = req.params;
+        if(!id){
+            return res.status(400).json("Please select any product")
+        }
+        await Product.findByIdAndDelete(id)
+        return res.status(200).json("Succesfully deleted")
+    } catch (error) {
+        console.error(error)
+        res.status(500).json("Server error")
+    }
+}
 
 
 
-// export const   =  async(req , res)=>{
-//     try {
-        
-//     } catch (error) {
-        
-//     }
-// }
+export const listOfProducts  =  async(req , res)=>{
+    try {
+        const list = await Product.find({});
+        return res.status(200).json({success:true, listOfProducts: list})
+    } catch (error) {
+        console.error(error)
+        res.status(500).json("Server error")
+    }
+}

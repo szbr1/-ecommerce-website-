@@ -1,35 +1,42 @@
 "use client"
 import React, { use, useContext, useEffect, useMemo, useState } from 'react'
-import { products } from '@/lib/products'
 import Image from 'next/image'
 import { FaStar } from "react-icons/fa";
 import { Star } from 'lucide-react';
 import Link from 'next/link';
 import ProductGrid from '@/components/product/ProductGrid';
 import { Context } from '@/components/ContexProvider';
+import useProductStore from '@/store/useProductStore';
 
 function page({params}) {
   const {id} = use(params)
-  const [clickImageSwither, setClickImageSwitcher] = useState(null)
+  const [clickImageSwither, setClickImageSwitcher] = useState("")
   const {addToCart} = useContext(Context);
   const [size , setSize] = useState()
+  const { listProduct, ActuallProduct } = useProductStore();
+     
 
-  
+  const stars = useMemo(() => {
+    return Math.floor(Math.random() * 500);
+  }, []);
+
+    useEffect(() => {
+        listProduct();
+       }, []);
   
   const FetchProduct = useMemo( ()=>{
-    return products.filter(item => item._id.includes(id))
-  },[id, products])
+    return ActuallProduct.filter(item => item._id.includes(id))
+  },[ActuallProduct])
 
   let RealtedProduct  = useMemo(()=>{
-    return products.filter(item => item.category === FetchProduct[0].category).slice(0,5)
-  },[id,products])
+    return ActuallProduct.filter(item => item.category === FetchProduct[0].category).slice(0,5)
+  },[ActuallProduct])
 
  
-let addToCartProductDetails;
   useEffect(()=>{
-     setClickImageSwitcher( FetchProduct[0].images[0])
-     addToCartProductDetails = FetchProduct[0]
-     console.log(clickImageSwither)
+    if (FetchProduct[0]) {
+      setClickImageSwitcher(FetchProduct[0].images[0]);
+    }
      
   }, [FetchProduct])
 
@@ -41,9 +48,9 @@ let addToCartProductDetails;
 
     <div className='py-8'>
 
-      {FetchProduct?.map(item=>{
+      {FetchProduct.length > 0 && FetchProduct?.map(item=>{
 
-        const stars = Math.random()*500
+  
         
 
         
@@ -56,7 +63,7 @@ let addToCartProductDetails;
               return(
                 <div key={index++} className='h-[4rem] mt-[2px] lg:h-[9rem] lg:w-[8rem] w-[4rem] pr-2'>
 
-                <Image src={image} onClick={()=>setClickImageSwitcher(image)} height={300} width={200} className='h-full cursor-pointer  w-full object-cover' />
+                {image&& (<Image src={image} alt={""} onClick={()=>setClickImageSwitcher(image)} height={300} width={200} className='h-full cursor-pointer  w-full object-cover' />)}
                 </div>
               )
             })}
@@ -64,7 +71,7 @@ let addToCartProductDetails;
            {/* product details  */}
            
            <div className='h-[24rem]  overflow-hidden lg:w-[35rem] lg:h-[38rem]  w-[22rem] b-gray-700/40 backdrop-blur-lg'>
-                <Image src={clickImageSwither} height={300} width={200} className='h-full w-full object-cover' />
+              {clickImageSwither&&(  <Image src={clickImageSwither} alt={""} height={300} width={200} priority className='h-full w-full object-cover' />)}
            </div>
           </div>
 
@@ -90,8 +97,11 @@ let addToCartProductDetails;
 
             <div className='flex'>
             {item.sizes.map((s)=>{
+              const isSelected = s === size;
               return (
-                <button onClick={()=> setSize(s)} className='h-16 w-16 flex justify-center items-center  ml-2 border border-gray-200 ' key={s}>
+                <button onClick={()=> setSize(s)}className={`h-16 w-16 flex justify-center items-center ml-2 border 
+                  ${isSelected ? 'bg-black text-white border-black' : 'bg-white text-black border-gray-200'}
+                  transition-all duration-200`} key={s}>
            {s}
               </button>
              )
@@ -127,10 +137,13 @@ let addToCartProductDetails;
               {
                  RealtedProduct?.map((item)=>{
                   return (
-                    <Link href={`/product/${item._id}`} key={item._id}>
-                  <ProductGrid image={item.images[0]} name={item.name} price={item.price} _id={item._id} />
+                    <div key={item._id}>
+                      <div>
 
-                    </Link>
+                  <ProductGrid image={item.images[0]} name={item.name} price={item.price} _id={item._id} />
+                      </div>
+
+                    </div>
                   )
                  })
               }

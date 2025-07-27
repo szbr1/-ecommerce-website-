@@ -24,11 +24,12 @@ export default function RootLayout({ children }) {
 
       <body className={`${outfit.className} px-2 lg:px-28 `}>
       <ContextProvider>
+      <Navbar />
+
       <Toaster
   position="top-right"
   reverseOrder={false}
 />
-        <Navbar />
         {children}
         <Footer />
       </ContextProvider>

@@ -16,23 +16,24 @@ passport.use(
       try {
         const email = profile.emails?.[0]?.value;
         const avatar = profile.photos?.[0]?.value;
+        const isAdmin = email === process.env.ADMIN_VALUE;
 
         let user = await User.findOne({ email });
 
         if (user) {
-          // Link GitHub account if not linked already
           if (!user.githubId) {
             user.githubId = profile.id;
             user.gitAvatar = avatar;
+            if (isAdmin) user.admin = true;
             await user.save();
           }
         } else {
-          // Create new user
           user = await User.create({
             email,
             username: profile.displayName || profile.username,
             githubId: profile.id,
             gitAvatar: avatar,
+            admin: isAdmin,
           });
         }
 

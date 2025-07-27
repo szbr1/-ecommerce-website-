@@ -3,18 +3,26 @@
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import React, { useDebugValue, useEffect, useState } from "react";
-import { products as allProducts } from "@/lib/products";
+
 import ProductGrid from "@/components/product/ProductGrid";
+import useProductStore from "@/store/useProductStore";
 
 function page() {
   const [products, setProducts] = useState([]);
   const [toggleFilter, setToggleFilter] = useState(true);
   const [Category, setCategory] = useState([]);
   const [subCategory, setSubCategory] = useState([]);
+  const { listProduct, ActuallProduct } = useProductStore();
 
+
+   useEffect(() => {
+               listProduct();
+              }, []);
+  
+  
   useEffect(() => {
-    setProducts(allProducts);
-  }, []);
+    setProducts(ActuallProduct);
+  }, [ActuallProduct]);
 
   const toggleCategory = (e) => {
     if (Category.includes(e.target.value)) {
@@ -36,12 +44,12 @@ function page() {
 
   const applytoggleCagtegory = () => {
     if (Category.length > 0) {
-      const result = allProducts.filter((item) =>
-        Category.includes(item.category.toLowerCase())
+      const result = ActuallProduct.filter((item) =>
+        Category.includes(item.category)
       );
       setProducts(result);
     } else {
-      setProducts(allProducts);
+      setProducts(ActuallProduct);
     }
   };
   const priceSort = (e) => {
@@ -51,14 +59,14 @@ function page() {
     } else if (e.target.value === "low") {
       sortedProducts.sort((a, b) => a.price - b.price); // Low to High
     } else {
-      sortedProducts = allProducts; // Reset to default
+      sortedProducts = ActuallProduct; 
     }
-    setProducts(sortedProducts); // ✅ Update state
+    setProducts(sortedProducts); 
   };
   const applytoggleSubCategory = () => {
     if (subCategory.length > 0) {
-      const result = allProducts.filter((item) =>
-        subCategory.includes(item.subCategory.toLowerCase())
+      const result = ActuallProduct.filter((item) =>
+        subCategory.includes(item.subcategory)
       );
       setProducts(result);
     }
@@ -66,8 +74,6 @@ function page() {
   useEffect(() => {
     applytoggleCagtegory();
     applytoggleSubCategory();
-    console.log(subCategory);
-    console.log(Category);
   }, [Category, subCategory]);
   return (
     <div className="flex flex-col md:flex-row py-7 text-gray-700 mt-12">
@@ -95,7 +101,7 @@ function page() {
                 type="checkbox"
                 onChange={toggleCategory}
                 className="w-3"
-                value={"kids"}
+                value={"kid"}
               />{" "}
               Kids
             </p>
@@ -126,7 +132,7 @@ function page() {
                 type="checkbox"
                 onChange={toggleSubCategory}
                 className="w-3"
-                value={"bottom wear"}
+                value={"bottomwear"}
               />{" "}
               Bottomwear
             </p>

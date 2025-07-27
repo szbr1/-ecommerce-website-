@@ -3,7 +3,8 @@ import mongoose from  "mongoose"
 const UserSchema = new mongoose.Schema({
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     username: {
         type: String,
@@ -13,7 +14,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: function () {
             return !this.googleId && !this.githubId;
-          }
+                              }
     },
     githubId: {
         type: String,
@@ -28,6 +29,12 @@ const UserSchema = new mongoose.Schema({
     },
     gitAvatar: {
         type: String
+    },
+    admin: { 
+        type: Boolean,
+        required: true,
+        default: false
+
     },
     cart: {
         type: Object,

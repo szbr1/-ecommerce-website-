@@ -1,5 +1,5 @@
 import express from "express";
-import { githubAuth, githubCallback, googleAuth, googleCallback, signin, signup } from "../controllers/auth.js";
+import { githubAuth, githubCallback, googleAuth, googleCallback, signin, signout, signup } from "../controllers/auth.js";
 
 
 const router = express.Router()
@@ -11,6 +11,7 @@ router.get("/google", googleAuth);
 router.get("/google/callback", googleCallback);
 router.get("/github", githubAuth);
 router.get("/github/callback", githubCallback);
+router.get("/signout", signout)
 
 
 export default router;

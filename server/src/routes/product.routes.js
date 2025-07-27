@@ -1,10 +1,11 @@
 import express from "express";
 import upload from "../config/multer.js";
-import { add } from "../controllers/product.js";
+import { add, listOfProducts, removeProduct } from "../controllers/product.js";
+import { AdminMiddleware } from "../middleware/AdminMiddleware.js";
 
 const router = express.Router();
 
-router.post(  "/add",
+router.post(  "/add", 
                          upload.fields([
                         { name: "image1" },
                         { name: "image2" },
@@ -13,8 +14,7 @@ router.post(  "/add",
                                         ]),
   add
 );
-// router.post("/", );
-// router.post("/", );
-// router.post("/", );
+router.delete("/remove/:id",  removeProduct);
+router.get("/list", listOfProducts);
 
 export default router;

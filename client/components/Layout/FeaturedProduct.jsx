@@ -1,20 +1,25 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { products as AllProducts } from "@/lib/products";
+
 import Image from "next/image";
 import ProductGrid from "@/components/product/ProductGrid";
 import { Coins, HeadphonesIcon, Headset, MapPinCheck } from "lucide-react";
+import useProductStore from "@/store/useProductStore";
 
 function FeaturedProduct() {
+    const { addProduct, listProduct, deleteProduct, ActuallProduct } = useProductStore();
     // created hook to get specific amount of products
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
     // using slice we get only the top 10 products
-    setProducts(AllProducts.slice(0, 10));
+    setProducts(ActuallProduct.slice(0, 10));
     
-  }, []);
+  }, [ActuallProduct]);
+  useEffect(() => {
+     listProduct();
+    }, []);
   return (
     
     <div className="h-full w-full ">
