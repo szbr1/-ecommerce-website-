@@ -1,103 +1,123 @@
-"use client";
-import useProductStore from "@/store/useProductStore";
-import React, { createContext, useEffect, useState } from "react";
-import toast from "react-hot-toast";
+"use client"
+import { createContext, useEffect, useReducer, useState } from "react";
+  
+
+// Cart actions
+const CART_ACTIONS = {
+
+  ADDTOCART: "addintoCart",
+  REMOVEFROMCART: "removeItemFromCart",
+  UPADATEQUANTITY: "updateItemQuantity",
+  CLEARCART: "clearCart"
+}
+
+
 
 export const Context = createContext();
 
-function ContextProvider({ children }) {
-  const [openProductId, setOpenProductId] = useState(false);
-  const [searchDetail, setSearchDetail] = useState("");
-  const [cartProduct, setCartProduct] = useState({});
-  const [totalProductsInCart, setTotalProductsInCart] = useState(0);
-  const [deliver_fee,setDelivery_fee] = useState(10)
-  const { listProduct, ActuallProduct } = useProductStore();
-  const [products, setProducts] = useState([])
+function ContextProvider({children}){
+    const initialState = {
+                           items: [],
+                        
+                         } 
+              
+    const reducer = (state, action)=>{
+          switch (action.type) {
+
+            case CART_ACTIONS.ADDTOCART:{
+                const {itemId, size, price} = action.payload;
+                const existProduct = state.items.findIndex(item => item.itemId === itemId && item.size === size);
+                if(existProduct !== -1){
+                  const upadatedProduct =  state.items.map((item , index)=> {
+                   return   index === existProduct ? 
+                      {...item, quantity: item.quantity+1}
+                       : item
+                    })
+
+                    return { ...state, items: upadatedProduct}
+                
+                }
 
 
-  useEffect(() => {
-              listProduct();
-             }, []);
- useEffect(()=>{
-                setProducts(ActuallProduct)
-              },[ActuallProduct])
-  const addToCart = async (itemId, size) => {
-    if (!itemId || !size) {
-      toast.error("Please select any size");
-      return;
+              return {
+                ...state,
+                items:[ {itemId:itemId, price: price,  size: size, quantity: 1}, ...state.items ]
+              }
+              
+            }
+            case CART_ACTIONS.REMOVEFROMCART : {
+               const {itemId, size} = action.payload;
+            
+               
+              const jhon = state.items.filter(item => !(item.itemId === itemId && item.size === size))
+              console.log("josh",jhon)
+               return {
+                ...state,
+                items: jhon
+               }
+
+                 
+               
+            }
+
+            case CART_ACTIONS.UPADATEQUANTITY: {
+              const {itemId, size, quantity} = action.payload;
+              const clone = structuredClone(state.items)
+
+              const product =  clone.find(item => item.itemId === itemId && item.size === size);
+              const filteredProduct = clone.filter(item=> !(item.itemId === itemId && item.size === size))
+            
+
+              return {
+                ...state,
+                items: [{...product, quantity: quantity},...filteredProduct ]
+              }
+            }
+              
+            default: return state;
+          }
+    }
+    // state mangement
+    const [state, dispatch] = useReducer(reducer , initialState)
+    const [deliver_fee, setDeliveryFee] = useState(10)
+    const [totalPayment, setTotalPayment] = useState(0)
+
+    // function providers
+    function addtoCart(itemId,size,price){
+        dispatch({
+          type: CART_ACTIONS.ADDTOCART,
+          payload: {itemId, size,price}
+        })
+    }
+    function removeFromCart(itemId, size){
+        dispatch({
+          type: CART_ACTIONS.REMOVEFROMCART,
+          payload: {itemId, size}
+        })
+    }
+    function clearCart(){
+       type: CART_ACTIONS.CLEARCART
     }
 
-    const clone = structuredClone(cartProduct);
-
-    if (clone[itemId]) {
-      if (clone[itemId][size]) {
-        clone[itemId][size] += 1;
-      } else {
-        clone[itemId][size] = 1;
-      }
-    } else {
-      clone[itemId] = { [size]: 1 };
+    function updateQuantity(itemId, size, quantity){
+      dispatch({
+        type:  CART_ACTIONS.UPADATEQUANTITY,
+        payload: {itemId, size , quantity}
+      })
     }
-
-    setCartProduct(clone);
-  };
-
-  const getCartItems = () => {
-    let total = 0;
-    for (const itemId in cartProduct) {
-      for (const size in cartProduct[itemId]) {
-        total += cartProduct[itemId][size];
-      }
-    }
-    setTotalProductsInCart(total);
-  };
-
-  const updateQunatity = (itemId, size, quantity) => {
-    const clone = structuredClone(cartProduct);
-    clone[itemId][size] = quantity;
-    setCartProduct(clone);
-    toast.success("Quantity updated");
-  };
-
-  const deliveryPayment = ()=>{
-    let totalAmout = 0
-    for(const items in cartProduct){
-      for(const item in cartProduct[items]){
-        if(cartProduct[items][item] > 0){
-
-          const ProductInCartPrice = products.find(product => product._id === items)
-          totalAmout += ProductInCartPrice.price * cartProduct[items][item];
-        }
-      }
-    }
-    return totalAmout;
     
-  }
+    useEffect(()=>{
+      
+     setTotalPayment(()=> state.items.reduce((acc, item)=> acc+ item.price *item.quantity, 0))
+       console.log(totalPayment)
+    },[state, totalPayment])
 
-  useEffect(() => {
-    getCartItems();
-    
-  }, [cartProduct]);
 
-  return (
-    <Context.Provider
-      value={{
-        openProductId,
-        setOpenProductId,
-        cartProduct,
-        setCartProduct,
-        addToCart,
-        updateQunatity,
-        totalProductsInCart,
-        searchDetail,
-        setSearchDetail,
-        deliveryPayment,
-        deliver_fee
-      }}
-    >
-      {children}
-    </Context.Provider>
-  );
+return (
+  <Context.Provider value={{addtoCart,deliver_fee,totalPayment, cartItems: state.items, updateQuantity, removeFromCart}}>
+    {children}
+  </Context.Provider>
+)
 }
 
 export default ContextProvider;

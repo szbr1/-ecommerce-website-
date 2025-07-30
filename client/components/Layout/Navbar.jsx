@@ -10,13 +10,15 @@ import { useRouter } from "next/navigation";
 import useAuthStore from "@/store/authStore";
 
 function Navbar() {
-  const { totalProductsInCart: cartCounter } = useContext(Context);
+  const { cartItems } = useContext(Context);
   const [searchToggle, setSearchToggle] = useState(false);
   const [textInput, setTextInput] = useState("");
   const { listProduct, ActuallProduct } = useProductStore();
   const {signout, loggedIn} = useAuthStore()
   const [displaySearchProducts, setDisplaySearchProducts] = useState([]);
   const [toggler , settoggler] = useState(false)
+
+   const totalItemsInCart = cartItems.reduce((acc , item)=> acc + item.quantity,0)
 
   useEffect(() => {
     listProduct();
@@ -85,7 +87,7 @@ function Navbar() {
           <Link href="/cart" className="relative">
             <ShoppingBag className="size-5 hover:text-green-600 cursor-pointer" />
             <span className="absolute -bottom-1 -right-0 flex justify-center items-center text-[10px] bg-black rounded-full size-[13px] text-white">
-              {cartCounter}
+              {totalItemsInCart}
             </span>
           </Link>
 

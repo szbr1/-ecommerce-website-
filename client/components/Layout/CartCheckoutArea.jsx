@@ -5,7 +5,7 @@ import { Context } from '../ContexProvider'
 import Title from '@/components/ui/Title'
 
 function CartCheckoutArea({cls}) {
-  const {deliveryPayment,deliver_fee } = useContext(Context)
+  const {totalPayment,deliver_fee } = useContext(Context)
   return (
     <div className='lg:flex justify-end '>
         <div className='lg:w-[30rem]'>
@@ -16,7 +16,7 @@ function CartCheckoutArea({cls}) {
 
           <div className=' py-4  px-2 flex justify-between items-center'>
             <div className='text-gray-600'>Subtotal</div>
-            <div>$ {deliveryPayment()}.00</div>
+            <div>$ {totalPayment}.00</div>
           </div> 
           <hr />
           <div className=' py-4  px-2 flex justify-between items-center'>
@@ -27,7 +27,7 @@ function CartCheckoutArea({cls}) {
           <div className=' py-4  px-2 flex justify-between items-center'>
             <div className='font-bold'>Total</div>
             <div>${
-              deliveryPayment() === 0 ? "": deliveryPayment() + deliver_fee
+              totalPayment === 0 ? "": totalPayment+ deliver_fee
               } .00</div>
           </div>
 

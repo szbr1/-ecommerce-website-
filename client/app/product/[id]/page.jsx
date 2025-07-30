@@ -11,7 +11,7 @@ import useProductStore from '@/store/useProductStore';
 function page({params}) {
   const {id} = use(params)
   const [clickImageSwither, setClickImageSwitcher] = useState("")
-  const {addToCart} = useContext(Context);
+  const {addtoCart} = useContext(Context);
   const [size , setSize] = useState()
   const { listProduct, ActuallProduct } = useProductStore();
      
@@ -108,7 +108,8 @@ function page({params}) {
             })}
             </div>
             {/* Cart Button  */}
-            <button onClick={()=>addToCart(item._id, size)} className='bg-black py-3 flex ml-2 cursor-pointer justify-center items-center my-5 uppercase w-44 text-white'>add to cart</button>
+            <button onClick={()=>addtoCart(item._id, size, item.price)} className='bg-black py-3 flex ml-2 cursor-pointer justify-center items-center my-5 uppercase w-44 text-white'>add to cart</button>
+            
 
             <hr className='bg-gray-300 h-[2px]'/>
 

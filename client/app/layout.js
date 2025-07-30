@@ -3,8 +3,8 @@ import "./globals.css";
 
 import { Outfit, Lora } from 'next/font/google'
 import Footer from "@/components/Layout/Footer";
-import ContextProvider from "@/components/ContexProvider";
 import { Toaster } from "react-hot-toast";
+import ContextProvider from "@/components/ContexProvider";
 
 const outfit = Outfit({ 
   subsets: ['latin'],
