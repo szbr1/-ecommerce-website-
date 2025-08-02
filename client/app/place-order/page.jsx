@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useContext, useEffect, useState } from "react";
 import Image from "next/image";
@@ -9,82 +9,71 @@ import CartCheckoutArea from "@/components/Layout/CartCheckoutArea";
 import { BusFront, BusIcon } from "lucide-react";
 import { Context } from "@/components/ContexProvider";
 import useProductStore from "@/store/useProductStore";
+import StripePaymentMethod from "@/components/ui/PaymentMethods";
+import RazorPaymentMethod from "@/components/ui/RazorPaymentMethod";
+import { useRouter } from "next/navigation";
+import { useCartStore } from "@/store/useCartStore";
+import { useOrderCreate } from "@/store/useOrderStore";
 
 function Page() {
-    const {cartProduct} = useContext(Context);
-    const {listProduct, ActuallProduct} = useProductStore()
+  const { cartItems, totalPayment, deliver_fee, loggedIn } =
+    useContext(Context);
+  const [paymentMethod, setPaymentMethod] = useState("razorpay");
+  const { getCartData, ProductsInCart } = useCartStore();
+  const {getPlaceOrders} = useOrderCreate()
+  const router = useRouter();
 
-    useEffect(()=>{
-      listProduct()
-    },[])
+  useEffect(() => {
+    getCartData();
+  }, []);
 
-    useEffect(()=>{
-      for(const items in cartProduct){
-        console.log("items",items)
-        for(const item in cartProduct[items] ){
-          console.log("item", item)
-          const sturcutredClone =  ActuallProduct.length > 0 ? ActuallProduct.find(product => product._id === items): undefined
-          if(structuredClone.length > 0){
-            setFormData(prev => ({...prev, pr: sturcutredClone}))
-          }
-        }
-      }
-  
-    },[])
-    for(const items in cartProduct){
-      console.log("items",items)
-      for(const item in cartProduct[items] ){
-        console.log("item", item)
-        const sturcutredClone =  ActuallProduct.length > 0 ? ActuallProduct.find(product => product._id === items): undefined
-        if(structuredClone.length > 0){
-          setFormData(prev => ({...prev, pr: sturcutredClone}))
-        }
-      }
-    }
+  const [formData, setFormData] = useState({
+    address: {
+      firstName: "",
+      lastName: "",
+      country: "",
+      zip: "",
+      phone: "",
+      state: "",
+      street: "",
+      email: "",
+    },
+    paymentMethod: "",
+    payment: "",
+    amount: "",
+    city: "",
+    order: [],
+  });
 
-    const [formData, setFormData] = useState({
-     
-      address:{
-        firstName:     "",
-        lastName:      "",
-        country:       "",
-        zip:           "",
-        phone:         "",
-        state:         "",
-        street:        "",
-        email:         ""
-        
-      },
+  const addressChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      amount: totalPayment + deliver_fee,
       paymentMethod: "",
-      payment:       "",
-      amount:        "",
-      pr:             {},
-   
-    })
-    
-    const handleChange = (e)=>{
-        setFormData({...formData,[e.target.name]: e.target.value})
-      }
-      const addressChange = (e)=>{
-      setFormData(
-        (prev)=>({
-          ...prev,
-          address: {
-          ...prev.address,
-          [e.target.name]: e.target.value
-          }
-        })
-      )
+      order: loggedIn === "user" ? ProductsInCart : cartItems,
+      paymentMethod: paymentMethod,
+      address: {
+        ...prev.address,
+        [e.target.name]: e.target.value,
+      },
+    }));
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+  };
 
+  if (loggedIn === "user") {
+    if (ProductsInCart.length < 0) {
+      router.push("/cart");
+      return;
+    } else if (cartItems.length < 0) {
+      router.push("/cart");
+      return;
     }
-    const handleSubmit = (e)=>{
-      e.preventDefault()
-      console.log(formData)
-    }
-    
-  
+  }
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-12 mt-8 h-screen px-4 md:px-12">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-12 mt-8 h-screen px-4 md:px-12 mb-44">
       {/* Left: Delivery Form Section */}
       <div>
         <Title
@@ -175,7 +164,7 @@ function Page() {
           {/* Phone */}
           <input
             required
-              onChange={addressChange}
+            onChange={addressChange}
             type="number"
             name="phone"
             placeholder="Phone"
@@ -185,32 +174,61 @@ function Page() {
           {/* Payment Methods */}
           <div className="w-full">
             <div className="flex items-center justify-center gap-3 mt-4">
-              <PaymentMethods src="/razorpay.png" />
-              <PaymentMethods src="/stripe.png" />
-              <div className=' h-12 w-44 focus:bg-green-50 flex justify-center items-center gap-2 p-2 cursor-pointer border-gray-200 border rounded-md text-xl font-bold text-gray-600 '> 
+              <StripePaymentMethod
+                setPaymentMethod={setPaymentMethod}
+                method={paymentMethod}
+                src="/stripe.png"
+              />
+              <RazorPaymentMethod
+                setPaymentMethod={setPaymentMethod}
+                method={paymentMethod}
+                src="/razorpay.png"
+              />
+              <button
+                onClick={() => setPaymentMethod("cod")}
+                className={`cursor-pointer h-12 w-44 flex justify-center items-center gap-2 p-2 border-gray-200 border rounded-md ${
+                  paymentMethod === "cod"
+                    ? "bg-black border-2 text-white border-gray3"
+                    : ""
+                }`}
+              >
                 <BusIcon />
                 COD
-
-                </div>
-
+              </button>
             </div>
           </div>
 
           {/* Proceed Button */}
-          <div
-           onClick={handleSubmit}
-            // href="/place-order/orders"
-            className="w-full h-12 mt-6 flex justify-center items-center bg-black text-white uppercase font-medium text-xl rounded-md"
+          <Link
+            onClick={()=>{
+              getPlaceOrders(formData)
+            }}
+            href="/place-order/orders"
+            className=" md:hidden w-full h-12 mt-6 flex justify-center items-center bg-black text-white uppercase font-medium text-xl rounded-md"
           >
-            Proceed
-          </div>
+            Procccccc
+          </Link>
         </div>
       </div>
 
       {/* Right: Order Summary */}
-      <div className="mt-52">
+      <div className=" mb-30 flex flex-col gap-7">
         {/* Cart total component */}
         <CartCheckoutArea cls="hidden" />
+        <div className="  justify-end hidden md:flex">
+          
+            <div
+            
+              // href="/place-order/orders"
+              onClick={()=>{
+                getPlaceOrders(formData)
+              }}
+              className="w-3/6 cursor-pointer h-12 flex justify-center items-center bg-black text-white uppercase font-medium text-xl "
+            >
+              Proceed
+            </div>
+          
+        </div>
       </div>
     </div>
   );

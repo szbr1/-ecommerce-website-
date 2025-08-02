@@ -10,7 +10,7 @@ export const middleware = (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_ASSIGN);
 
-    req.user = decoded; // now available in your protected routes
+    req.userId = decoded.userId._id; // now available in your protected routes
     next();
   } catch (error) {
     console.error("JWT verification failed:", error);

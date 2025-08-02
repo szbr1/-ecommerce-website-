@@ -7,13 +7,15 @@ import Link from 'next/link';
 import ProductGrid from '@/components/product/ProductGrid';
 import { Context } from '@/components/ContexProvider';
 import useProductStore from '@/store/useProductStore';
+import { useCartStore } from '@/store/useCartStore';
 
 function page({params}) {
   const {id} = use(params)
   const [clickImageSwither, setClickImageSwitcher] = useState("")
   const {addtoCart} = useContext(Context);
   const [size , setSize] = useState()
-  const { listProduct, ActuallProduct } = useProductStore();
+  const { listProduct, ActuallProduct,} = useProductStore();
+  const {addCartToTheProduct} = useCartStore()
      
 
   const stars = useMemo(() => {
@@ -108,7 +110,12 @@ function page({params}) {
             })}
             </div>
             {/* Cart Button  */}
-            <button onClick={()=>addtoCart(item._id, size, item.price)} className='bg-black py-3 flex ml-2 cursor-pointer justify-center items-center my-5 uppercase w-44 text-white'>add to cart</button>
+            <button onClick={()=>{
+              addtoCart(item._id, size, item.price)
+              addCartToTheProduct(item._id, size, item.price)
+            
+              
+            }} className='bg-black py-3 flex ml-2 cursor-pointer justify-center items-center my-5 uppercase w-44 text-white'>add to cart</button>
             
 
             <hr className='bg-gray-300 h-[2px]'/>

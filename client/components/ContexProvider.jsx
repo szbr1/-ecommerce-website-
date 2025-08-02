@@ -1,4 +1,5 @@
 "use client"
+import { useCartStore } from "@/store/useCartStore";
 import { createContext, useEffect, useReducer, useState } from "react";
   
 
@@ -81,6 +82,8 @@ function ContextProvider({children}){
     const [state, dispatch] = useReducer(reducer , initialState)
     const [deliver_fee, setDeliveryFee] = useState(10)
     const [totalPayment, setTotalPayment] = useState(0)
+    const [loggedIn, setLoggedIn] = useState("");
+    const {getCartData, ProductsInCart} = useCartStore();
 
     // function providers
     function addtoCart(itemId,size,price){
@@ -106,15 +109,44 @@ function ContextProvider({children}){
       })
     }
     
-    useEffect(()=>{
-      
-     setTotalPayment(()=> state.items.reduce((acc, item)=> acc+ item.price *item.quantity, 0))
-       console.log(totalPayment)
-    },[state, totalPayment])
+    // Backend user: Fetch total from backend cart
+useEffect(() => {
+  if (loggedIn === "user") {
+    getCartData();
+  }
+}, [loggedIn]);
 
+useEffect(() => {
+  if (loggedIn === "user") {
+    const price = ProductsInCart.length> 0 ?ProductsInCart.reduce(
+      (acc, item) => acc + item.price * item.quantity,0):null
+    setTotalPayment(price);
+  }
+}, [ProductsInCart, loggedIn]);
+
+// Local cart user: Calculate from reducer state
+useEffect(() => {
+  if (loggedIn !== "user") {
+    const price = state.items.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
+    );
+    setTotalPayment(price);
+  }
+}, [state.items, loggedIn]);
+
+    
+
+    useEffect(() => {
+      const cookies = document.cookie.split("; ");
+      const token = cookies.find(c => c.startsWith("token="))?.split("=")[1];
+      const admin = cookies.find(c => c.startsWith("adminToken="))?.split("=")[1];
+      if (token) setLoggedIn("user");
+      else if (admin) setLoggedIn("admin");
+    }, []);
 
 return (
-  <Context.Provider value={{addtoCart,deliver_fee,totalPayment, cartItems: state.items, updateQuantity, removeFromCart}}>
+  <Context.Provider value={{addtoCart,deliver_fee,totalPayment,loggedIn, cartItems: state.items, updateQuantity, removeFromCart}}>
     {children}
   </Context.Provider>
 )

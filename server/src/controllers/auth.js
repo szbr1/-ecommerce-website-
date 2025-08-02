@@ -45,7 +45,7 @@ export const signup = async (req, res) => {
 
     const token = isAdminEmail(email)
       ? AssignTokenToAdmin(res, email)
-      : AssignTokenToUser(res, newUser._id);
+      : AssignTokenToUser(res, newUser);
 
     return res.status(200).json({ success: true, user: newUser, token });
   } catch (error) {
@@ -82,8 +82,8 @@ export const signin = async (req, res) => {
     }
 
     const token = isAdminEmail(email)
-      ? AssignTokenToAdmin(res, email)
-      : AssignTokenToUser(res, user._id);
+      ? AssignTokenToAdmin(res, user)
+      : AssignTokenToUser(res, user);
 
     return res.status(200).json({ success: true, user, token });
   } catch (error) {
@@ -101,8 +101,8 @@ const handleOAuthCallback = (strategyName) => (req, res, next) => {
     }
 
     isAdminEmail(user.email)
-      ? AssignTokenToAdmin(res, user.email)
-      : AssignTokenToUser(res, user.email);
+      ? AssignTokenToAdmin(res, user)
+      : AssignTokenToUser(res, user);
 
     res.redirect("http://localhost:3000");
   })(req, res, next);

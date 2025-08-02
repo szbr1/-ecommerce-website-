@@ -8,9 +8,9 @@ export const AdminMiddleware = (req, res, next) => {
       return res.status(401).json("Access denied. Admin token missing.");
     }
 
-      jwt.verify(token, process.env.ADMIN_EMAIL);
+    const decode =  jwt.verify(token, process.env.JWT_ASSIGN);
 
-    
+     req.adminId = decode.adminId._id
    
 
     next();

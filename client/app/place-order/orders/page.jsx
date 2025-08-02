@@ -15,16 +15,18 @@ function Page() {
             key={product._id}
             className="border rounded-xl p-4 shadow-sm hover:shadow-md transition"
           >
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-center">
+            <div className="flex justify-between items-center">
+             <div className="flex  justify-center  items-center gap-6">
+
               {/* Image */}
-              <div className="md:col-span-1 w-full h-24">
+              <div className="md:col-span-1 w-24 h-28">
                 <Image
                   src={product.images[0]}
                   alt="Product"
                   width={100}
                   height={100}
                   className="h-full w-full object-cover rounded-md"
-                />
+                  />
               </div>
 
               {/* Details */}
@@ -41,6 +43,7 @@ function Page() {
                   </span>
                 </p>
               </div>
+                  </div>
 
               {/* Status */}
               <div className="flex items-center gap-2 text-green-600 text-sm">
@@ -50,7 +53,7 @@ function Page() {
 
               {/* Button */}
               <div className="flex justify-end">
-                <Button variant="outline">Track Order</Button>
+                <Button variant="outline" className={"uppercase font-normal text-gray-800 text-sm"}>Track Order</Button>
               </div>
             </div>
           </div>

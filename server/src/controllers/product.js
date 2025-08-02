@@ -33,6 +33,7 @@ export const add  =  async(req , res)=>{
             description,
             category,
             subcategory,
+            
             sizes,
             bestseller: bestseller === "true",
             images

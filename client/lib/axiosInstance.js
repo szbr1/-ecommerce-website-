@@ -11,3 +11,13 @@ export const productAxiosInstance = axios.create({
     withCredentials: true
 })
 
+export const cartAxiosInstance = axios.create({
+    baseURL: "http://localhost:4998/api/cart/",
+    withCredentials: true
+})
+
+export const orderAxiosInstance = axios.create({
+    baseURL: "http://localhost:4998/api/order/",
+    withCredentials: true
+})
+

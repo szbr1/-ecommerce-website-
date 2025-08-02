@@ -1,7 +1,6 @@
 import express from "express";
 import upload from "../config/multer.js";
 import { add, listOfProducts, removeProduct } from "../controllers/product.js";
-import { AdminMiddleware } from "../middleware/AdminMiddleware.js";
 
 const router = express.Router();
 

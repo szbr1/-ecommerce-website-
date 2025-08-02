@@ -14,7 +14,10 @@ export const AssignTokenToUser = (res, userId) => {
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
       sameSite: "strict",
       secure: process.env.NODE_ENV === "production",
-      httpOnly: true,
+     // i turn off this because i want cookies in the client side in frontend. it is risk of xss attack but
+      // i am creating this project for just myself i can get cookies then for that i have to create a diffrent 
+      // route and i don't want that for now.i want to keep it simple
+      httpOnly: false,
     });
 
     return token;
@@ -29,7 +32,7 @@ export const AssignTokenToAdmin = (res, adminId) => {
       return res.status(400).json("Admin ID Missing");
     }
 
-    const token = jwt.sign({ adminId, role: "admin" }, process.env.ADMIN_EMAIL, {
+    const token = jwt.sign({ adminId, role: "admin" }, process.env.ADMIN_SECRET, {
       expiresIn: "30d",
     });
 
@@ -37,7 +40,10 @@ export const AssignTokenToAdmin = (res, adminId) => {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       sameSite: "strict",
       secure: process.env.NODE_ENV === "production",
-      httpOnly: true,
+      // i turn off this because i want cookies in the client side in frontend. it is risk of xss attack but
+      // i am creating this project for just myself i can get cookies then for that i have to create a diffrent 
+      // route and i don't want that for now.i want to keep it simple
+      httpOnly: false,
     });
 
     return token;
